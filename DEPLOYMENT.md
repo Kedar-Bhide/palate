@@ -4,11 +4,13 @@ This guide will walk you through deploying the Palate MVP for **100% FREE** usin
 
 ## ✅ Confirmed Free Services Used
 
-- **Frontend**: Vercel (Free forever - 100GB bandwidth)
-- **Backend**: Railway (Free $5 monthly credit) 
+- **Frontend**: Vercel (Free forever - 100GB bandwidth + free *.vercel.app domain)
+- **Backend**: Railway (Free $5 monthly credit + free *.railway.app domain) 
 - **Database**: Supabase PostgreSQL (Free 500MB)
 - **Authentication**: Firebase Auth (Free 10K users/month)
 - **File Storage**: Firebase Storage (Free 1GB storage, 10GB transfer/month)
+
+**🆓 You get FREE domains**: `https://your-app.vercel.app` and `https://your-backend.railway.app`
 
 ## 🚀 Complete Step-by-Step Setup
 
@@ -265,11 +267,11 @@ git push -u origin main
    ```
    NODE_ENV = production
    DATABASE_URL = [paste_your_supabase_connection_string]
-   FRONTEND_URL = https://yourdomain.vercel.app
+   FRONTEND_URL = https://temporary-placeholder.com
    FIREBASE_SERVICE_ACCOUNT_KEY = [paste_entire_json]
    FIREBASE_STORAGE_BUCKET = palate-mvp-yourname.appspot.com
    ```
-4. **Note**: We'll update `FRONTEND_URL` after Vercel deployment
+4. **Note**: Use temporary placeholder for `FRONTEND_URL` - we'll update it with your free Vercel URL in Step 9.2
 5. Click **"Deploy"** to restart with new variables
 
 **7.4 Get Railway URL**
@@ -341,8 +343,10 @@ NEXT_PUBLIC_API_BASE_URL = [your_railway_url]/api
 2. Click on your project → your service
 3. Click **"Variables"** tab
 4. Find `FRONTEND_URL` variable
-5. Update it to your Vercel URL: `https://palate-mvp-xyz.vercel.app`
+5. Update it to your **FREE Vercel URL**: `https://palate-mvp-xyz.vercel.app` (use your actual domain from Step 8.4)
 6. Service will auto-redeploy
+
+**💡 No Custom Domain Needed!** Vercel gives you a free URL like `https://palate-mvp-abc123.vercel.app`
 
 **9.3 Update Google OAuth Redirect**
 1. Go to [Google Cloud Console](https://console.cloud.google.com)
