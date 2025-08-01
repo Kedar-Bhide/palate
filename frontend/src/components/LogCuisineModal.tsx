@@ -30,10 +30,12 @@ export default function LogCuisineModal({ isOpen, onClose, onSuccess }: LogCuisi
   const fetchCuisines = async () => {
     try {
       const response = await apiClient.get('/cuisines');
+      console.log('Cuisines response:', response);
       setCuisines(response as unknown as Cuisine[]);
+      setError(''); // Clear any previous errors
     } catch (error) {
       console.error('Failed to fetch cuisines:', error);
-      setError('Failed to load cuisines');
+      setError('Failed to load cuisines. Please try refreshing the page.');
     }
   };
 
