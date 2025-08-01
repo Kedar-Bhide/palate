@@ -275,10 +275,19 @@ git push -u origin main
 5. Click **"Deploy"** to restart with new variables
 
 **7.4 Get Railway URL**
-1. Click **"Settings"** tab
-2. Scroll to **"Environment"** section
-3. Copy the **"Public URL"** (looks like `https://xxxxx.railway.app`)
-4. Save this URL - you'll need it for frontend!
+1. In your Railway project dashboard, look for your deployed service
+2. You should see a **"Domain"** or **"URL"** displayed on the main project page
+3. If not visible, try these locations:
+   - Click **"Settings"** tab → look for **"Public Networking"** or **"Domains"**
+   - Click **"Deployments"** tab → click on latest deployment → look for domain
+   - Check the **"Overview"** tab for the public URL
+4. Copy the URL (looks like `https://palate-mvp-production-xxxx.up.railway.app`)
+5. Save this URL - you'll need it for frontend!
+
+**💡 Can't find the URL?** 
+- It might appear after adding environment variables and redeploying
+- You can continue to Step 8 (Vercel) and come back to get the Railway URL
+- The Railway URL will be needed for Step 8.3 (frontend environment variables)
 
 ### STEP 8: Frontend Deployment (Vercel) - 5 minutes
 
@@ -319,7 +328,9 @@ NEXT_PUBLIC_FIREBASE_APP_ID = [from_your_firebase_config]
 NEXT_PUBLIC_API_BASE_URL = [your_railway_url]/api
 ```
 
-5. For `NEXT_PUBLIC_API_BASE_URL`, use your Railway URL from Step 7.4 + `/api`
+5. For `NEXT_PUBLIC_API_BASE_URL`: 
+   - If you have your Railway URL from Step 7.4: `https://your-railway-url.railway.app/api`
+   - If Railway URL not visible yet: Use `https://temporary-backend.com/api` (we'll fix this in Step 9)
 6. After adding all variables, click **"Redeploy"** button
 
 **8.4 Get Your Live URL**
