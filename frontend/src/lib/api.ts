@@ -8,6 +8,12 @@ interface ApiResponse {
 
 class ApiClient {
   private async getAuthHeaders(): Promise<HeadersInit> {
+    if (!auth) {
+      return {
+        'Content-Type': 'application/json',
+      };
+    }
+    
     const user = auth.currentUser;
     if (user) {
       const token = await user.getIdToken();
@@ -51,12 +57,14 @@ class ApiClient {
   }
 
   async postFormData(endpoint: string, formData: FormData): Promise<ApiResponse> {
-    const user = auth.currentUser;
     const headers: HeadersInit = {};
     
-    if (user) {
-      const token = await user.getIdToken();
-      headers['Authorization'] = `Bearer ${token}`;
+    if (auth) {
+      const user = auth.currentUser;
+      if (user) {
+        const token = await user.getIdToken();
+        headers['Authorization'] = `Bearer ${token}`;
+      }
     }
 
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {

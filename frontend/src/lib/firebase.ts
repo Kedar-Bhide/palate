@@ -11,9 +11,18 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
-export const storage = getStorage(app);
-export const googleProvider = new GoogleAuthProvider();
+// Only initialize Firebase in the browser environment
+let app: ReturnType<typeof initializeApp> | undefined;
+let auth: ReturnType<typeof getAuth> | undefined;
+let storage: ReturnType<typeof getStorage> | undefined;
+let googleProvider: GoogleAuthProvider | undefined;
 
+if (typeof window !== 'undefined' && firebaseConfig.apiKey) {
+  app = initializeApp(firebaseConfig);
+  auth = getAuth(app);
+  storage = getStorage(app);
+  googleProvider = new GoogleAuthProvider();
+}
+
+export { auth, storage, googleProvider };
 export default app;
