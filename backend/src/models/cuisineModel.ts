@@ -55,36 +55,56 @@ export class CuisineModel {
   }
 
   static async getUserCuisineLogs(userId: string): Promise<CuisineLogWithDetails[]> {
-    const result = await pool.query(`
-      SELECT 
-        cl.*,
-        COALESCE(
-          ARRAY_AGG(
-            JSON_BUILD_OBJECT(
-              'id', c.id,
-              'name', c.name,
-              'category', c.category
-            )
-          ) FILTER (WHERE c.id IS NOT NULL),
-          ARRAY[]::json[]
-        ) as cuisines
-      FROM cuisine_logs cl
-      LEFT JOIN log_cuisines lc ON cl.id = lc.log_id
-      LEFT JOIN cuisines c ON lc.cuisine_id = c.id
-      WHERE cl.user_id = $1
-      GROUP BY cl.id, cl.user_id, cl.photo_url, cl.caption, cl.created_at
-      ORDER BY cl.created_at DESC
-    `, [userId]);
-    return result.rows;
+    try {
+      const result = await pool.query(`
+        SELECT 
+          cl.*,
+          COALESCE(
+            ARRAY_AGG(
+              JSON_BUILD_OBJECT(
+                'id', c.id,
+                'name', c.name,
+                'category', c.category
+              )
+            ) FILTER (WHERE c.id IS NOT NULL),
+            ARRAY[]::json[]
+          ) as cuisines
+        FROM cuisine_logs cl
+        LEFT JOIN log_cuisines lc ON cl.id = lc.log_id
+        LEFT JOIN cuisines c ON lc.cuisine_id = c.id
+        WHERE cl.user_id = $1
+        GROUP BY cl.id, cl.user_id, cl.photo_url, cl.caption, cl.created_at
+        ORDER BY cl.created_at DESC
+      `, [userId]);
+      return result.rows;
+    } catch (error) {
+      console.error('getUserCuisineLogs error:', error);
+      // Fallback: if log_cuisines table doesn't exist yet, return empty array
+      const fallbackResult = await pool.query(`
+        SELECT 
+          cl.*,
+          ARRAY[]::json[] as cuisines
+        FROM cuisine_logs cl
+        WHERE cl.user_id = $1
+        ORDER BY cl.created_at DESC
+      `, [userId]);
+      return fallbackResult.rows;
+    }
   }
 
   static async getUserStats(userId: string): Promise<{ total_cuisines: number }> {
-    const result = await pool.query(`
-      SELECT COUNT(DISTINCT lc.cuisine_id) as total_cuisines 
-      FROM cuisine_logs cl
-      LEFT JOIN log_cuisines lc ON cl.id = lc.log_id
-      WHERE cl.user_id = $1 AND lc.cuisine_id IS NOT NULL
-    `, [userId]);
-    return { total_cuisines: parseInt(result.rows[0].total_cuisines || '0') };
+    try {
+      const result = await pool.query(`
+        SELECT COUNT(DISTINCT lc.cuisine_id) as total_cuisines 
+        FROM cuisine_logs cl
+        LEFT JOIN log_cuisines lc ON cl.id = lc.log_id
+        WHERE cl.user_id = $1 AND lc.cuisine_id IS NOT NULL
+      `, [userId]);
+      return { total_cuisines: parseInt(result.rows[0].total_cuisines || '0') };
+    } catch (error) {
+      console.error('getUserStats error:', error);
+      // Fallback: return 0 if log_cuisines table doesn't exist yet
+      return { total_cuisines: 0 };
+    }
   }
 }
