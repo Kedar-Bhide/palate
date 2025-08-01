@@ -26,6 +26,7 @@ INSERT INTO cuisines (name, category) VALUES
 
 -- American Cuisines
 ('American', 'American'),
+('Hawaiian', 'American'),
 ('Mexican', 'American'),
 ('Brazilian', 'American'),
 ('Argentinian', 'American'),
@@ -34,19 +35,38 @@ INSERT INTO cuisines (name, category) VALUES
 ('Cuban', 'American'),
 ('Jamaican', 'American'),
 
--- Middle Eastern & African
+-- Middle Eastern Cuisines
 ('Lebanese', 'Middle Eastern'),
 ('Persian', 'Middle Eastern'),
-('Moroccan', 'African'),
-('Ethiopian', 'African'),
 ('Egyptian', 'Middle Eastern'),
 ('Israeli', 'Middle Eastern'),
+('Syrian', 'Middle Eastern'),
+('Jordanian', 'Middle Eastern'),
+
+-- Mediterranean Cuisines
+('Greek', 'Mediterranean'),
+('Italian', 'Mediterranean'),
+('Spanish', 'Mediterranean'),
+('Turkish', 'Mediterranean'),
+('Moroccan', 'Mediterranean'),
+('Tunisian', 'Mediterranean'),
+('Cypriot', 'Mediterranean'),
+
+-- African Cuisines
+('Moroccan', 'African'),
+('Ethiopian', 'African'),
+('Nigerian', 'African'),
+('South African', 'African'),
+('Kenyan', 'African'),
+('Ghanaian', 'African'),
+('Senegalese', 'African'),
+('Tunisian', 'African'),
+('Algerian', 'African'),
+('Egyptian', 'African'),
 
 -- Other
 ('Australian', 'Oceanian'),
-('Fusion', 'Fusion'),
 ('Vegetarian', 'Dietary'),
-('Vegan', 'Dietary'),
-('Mediterranean', 'Mediterranean')
+('Vegan', 'Dietary')
 
 ON CONFLICT (name) DO NOTHING;

@@ -22,7 +22,7 @@ export class CuisineController {
         return;
       }
 
-      const { cuisine_id, caption } = req.body;
+      const { cuisine_ids: cuisineIdsRaw, caption } = req.body;
       const file = req.file;
 
       if (!file) {
@@ -30,8 +30,15 @@ export class CuisineController {
         return;
       }
 
-      if (!cuisine_id) {
-        res.status(400).json({ error: 'Cuisine ID is required' });
+      let cuisine_ids: number[];
+      try {
+        cuisine_ids = JSON.parse(cuisineIdsRaw);
+        if (!Array.isArray(cuisine_ids) || cuisine_ids.length === 0) {
+          res.status(400).json({ error: 'At least one cuisine must be selected' });
+          return;
+        }
+      } catch (error) {
+        res.status(400).json({ error: 'Invalid cuisine selection format' });
         return;
       }
 
@@ -42,7 +49,7 @@ export class CuisineController {
 
         const cuisineLog = await CuisineModel.createCuisineLog({
           user_id: req.user!.uid,
-          cuisine_id: parseInt(cuisine_id),
+          cuisine_ids: cuisine_ids.map((id: number) => parseInt(id.toString())),
           photo_url,
           caption,
         });
@@ -76,7 +83,7 @@ export class CuisineController {
 
           const cuisineLog = await CuisineModel.createCuisineLog({
             user_id: req.user!.uid,
-            cuisine_id: parseInt(cuisine_id),
+            cuisine_ids: cuisine_ids.map((id: number) => parseInt(id.toString())),
             photo_url,
             caption,
           });

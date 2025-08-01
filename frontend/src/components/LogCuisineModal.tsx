@@ -14,7 +14,7 @@ interface LogCuisineModalProps {
 
 export default function LogCuisineModal({ isOpen, onClose, onSuccess }: LogCuisineModalProps) {
   const [cuisines, setCuisines] = useState<Cuisine[]>([]);
-  const [selectedCuisine, setSelectedCuisine] = useState<number | null>(null);
+  const [selectedCuisines, setSelectedCuisines] = useState<number[]>([]);
   const [photo, setPhoto] = useState<File | null>(null);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const [caption, setCaption] = useState('');
@@ -51,10 +51,18 @@ export default function LogCuisineModal({ isOpen, onClose, onSuccess }: LogCuisi
     }
   };
 
+  const handleCuisineToggle = (cuisineId: number) => {
+    setSelectedCuisines(prev => 
+      prev.includes(cuisineId) 
+        ? prev.filter(id => id !== cuisineId)
+        : [...prev, cuisineId]
+    );
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedCuisine || !photo) {
-      setError('Please select a cuisine and upload a photo');
+    if (selectedCuisines.length === 0 || !photo) {
+      setError('Please select at least one cuisine and upload a photo');
       return;
     }
 
@@ -63,7 +71,7 @@ export default function LogCuisineModal({ isOpen, onClose, onSuccess }: LogCuisi
 
     try {
       const formData = new FormData();
-      formData.append('cuisine_id', selectedCuisine.toString());
+      formData.append('cuisine_ids', JSON.stringify(selectedCuisines));
       formData.append('photo', photo);
       if (caption) {
         formData.append('caption', caption);
@@ -158,7 +166,7 @@ export default function LogCuisineModal({ isOpen, onClose, onSuccess }: LogCuisi
 
           <div className="mb-6">
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Select Cuisine *
+              Select Cuisines * ({selectedCuisines.length} selected)
             </label>
             <div className="max-h-48 overflow-y-auto border rounded-lg">
               {Object.entries(cuisinesByCategory).map(([category, categorycuisines]) => (
@@ -168,19 +176,17 @@ export default function LogCuisineModal({ isOpen, onClose, onSuccess }: LogCuisi
                     {categorycuisines.map((cuisine) => (
                       <label
                         key={cuisine.id}
-                        className={`flex items-center p-2 rounded cursor-pointer ${
-                          selectedCuisine === cuisine.id
+                        className={`flex items-center p-2 rounded cursor-pointer border ${
+                          selectedCuisines.includes(cuisine.id)
                             ? 'bg-orange-100 border-orange-300'
-                            : 'hover:bg-gray-50'
+                            : 'hover:bg-gray-50 border-transparent'
                         }`}
                       >
                         <input
-                          type="radio"
-                          name="cuisine"
-                          value={cuisine.id}
-                          checked={selectedCuisine === cuisine.id}
-                          onChange={() => setSelectedCuisine(cuisine.id)}
-                          className="sr-only"
+                          type="checkbox"
+                          checked={selectedCuisines.includes(cuisine.id)}
+                          onChange={() => handleCuisineToggle(cuisine.id)}
+                          className="mr-2 h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300 rounded"
                         />
                         <span className="text-sm">{cuisine.name}</span>
                       </label>
@@ -214,10 +220,10 @@ export default function LogCuisineModal({ isOpen, onClose, onSuccess }: LogCuisi
             </button>
             <button
               type="submit"
-              disabled={loading || !selectedCuisine || !photo}
+              disabled={loading || selectedCuisines.length === 0 || !photo}
               className="flex-1 px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
-              {loading ? 'Logging...' : 'Log Cuisine'}
+              {loading ? 'Logging...' : 'Log Cuisines'}
             </button>
           </div>
         </form>

@@ -52,19 +52,26 @@ export default function ProfilePage({ logs, stats }: ProfilePageProps) {
                 <div className="flex gap-4">
                   <Image
                     src={log.photo_url}
-                    alt={log.cuisine_name}
+                    alt={log.cuisines.map(c => c.name).join(', ')}
                     width={80}
                     height={80}
                     className="w-20 h-20 object-cover rounded-lg"
                   />
                   <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
+                    <div className="flex items-center flex-wrap gap-2 mb-1">
                       <h4 className="text-lg font-medium text-gray-900">
-                        {log.cuisine_name}
+                        {log.cuisines.map(c => c.name).join(', ')}
                       </h4>
-                      <span className="px-2 py-1 bg-orange-100 text-orange-800 text-xs rounded-full">
-                        {log.cuisine_category}
-                      </span>
+                    </div>
+                    <div className="flex flex-wrap gap-1 mb-2">
+                      {log.cuisines.map((cuisine) => (
+                        <span 
+                          key={cuisine.id}
+                          className="px-2 py-1 bg-orange-100 text-orange-800 text-xs rounded-full"
+                        >
+                          {cuisine.category}
+                        </span>
+                      ))}
                     </div>
                     <p className="text-sm text-gray-500 mb-2">
                       {formatDate(log.created_at.toString())}
