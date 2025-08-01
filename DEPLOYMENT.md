@@ -253,8 +253,10 @@ git push -u origin main
 5. Select your `palate-mvp` repository
 6. Click **"Install"**
 7. Back on Railway, click your `palate-mvp` repository
-8. Railway will start deploying automatically
-9. ⏳ Wait 3-5 minutes for deployment
+8. **Important**: Railway will automatically detect the `railway.toml` config
+9. Railway will start deploying automatically (builds backend subdirectory)
+10. ⏳ Wait 3-5 minutes for deployment
+11. If you see "No start command found" error, the variables step will fix it
 
 **7.3 Add Environment Variables**
 1. Click on your deployed service (should show as "Deployed")
@@ -397,18 +399,46 @@ Your MVP is live! Here's what you can do:
 
 ## 🆘 Troubleshooting
 
+### Common Railway Issues
+
+**"No start command found" error?**
+- Make sure you pushed the latest code with `railway.toml` file
+- Add environment variables in Railway dashboard (Step 7.3)
+- Check that the `railway.toml` file exists in your project root
+
+**Railway build failing?**
+- Check Railway logs: Go to your project → Deployments → Click on failed deployment
+- Make sure all dependencies are in `backend/package.json`
+- Verify the build command in `railway.toml` is correct
+
+### Local Development Issues
+
+**"TypeError: Failed to fetch" errors?**
+- Make sure backend is running: `npm run dev` in project root
+- Check that backend shows "Server running on port 3001"
+- Verify frontend is using `http://localhost:3001/api` in `.env.local`
+
+**Firebase JSON parsing errors?**
+- Don't worry! The app works in development mode without Firebase
+- You'll see warnings but the app will function with mock data
+- For production, you'll need proper Firebase service account key
+
+### Firebase Issues
+
 **Login not working?**
-- Check Firebase authorized domains
-- Verify Google OAuth redirect URIs
+- Check Firebase authorized domains include your Vercel domain
+- Verify Google OAuth redirect URIs are correct
 - Check browser console for errors
 
 **Photos not uploading?**
-- Check Firebase Storage rules
-- Verify service account key is correct
+- In development: Uses placeholder images (normal behavior)
+- In production: Check Firebase Storage rules and service account key
 
-**Backend errors?**
-- Check Railway logs in dashboard  
-- Verify all environment variables are set
-- Check database connection string
+### Database Issues
+
+**Backend errors about database?**
+- Verify Supabase connection string is correct in environment variables
+- Check that database schema and seed data were applied
+- Test connection in Supabase dashboard
 
 **Need help?** Open an issue on GitHub!
