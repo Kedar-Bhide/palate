@@ -12,8 +12,19 @@ const app = express();
 const PORT = parseInt(process.env.PORT || '3001');
 
 app.use(helmet());
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://try-palate.vercel.app'
+];
+
+if (process.env.FRONTEND_URL) {
+  allowedOrigins.push(process.env.FRONTEND_URL);
+}
+
+console.log('CORS allowed origins:', allowedOrigins);
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  origin: allowedOrigins,
   credentials: true,
 }));
 app.use(morgan('combined'));
