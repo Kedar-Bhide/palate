@@ -23,12 +23,12 @@ export default function LoginPage() {
       <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8">
         <div className="text-center">
           <h1 className="text-4xl font-bold text-gray-900 mb-2">Palate</h1>
-          <p className="text-gray-600 mb-8">Track your culinary journey</p>
+          <p className="text-gray-600 mb-8">Where food meets identity</p>
           
           <div className="mb-8">
             <div className="text-6xl mb-4">🍽️</div>
             <p className="text-gray-700">
-              Log different cuisines you&apos;ve tried, upload photos, and build your personal culinary profile.
+              Where food meets identity
             </p>
           </div>
 

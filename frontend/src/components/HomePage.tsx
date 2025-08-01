@@ -53,7 +53,7 @@ export default function HomePage() {
               Welcome to Palate, {user?.displayName?.split(' ')[0]}!
             </h2>
             <p className="text-gray-600 mb-8 max-w-md mx-auto">
-              Start your culinary journey by logging your first cuisine experience.
+              Where food meets identity
             </p>
             <button
               onClick={() => setShowLogModal(true)}
