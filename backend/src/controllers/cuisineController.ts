@@ -8,10 +8,11 @@ export class CuisineController {
   static async getAllCuisines(req: AuthenticatedRequest, res: Response): Promise<void> {
     try {
       const cuisines = await CuisineModel.getAllCuisines();
+      console.log('Retrieved cuisines:', cuisines.length);
       res.json(cuisines);
     } catch (error) {
       console.error('Get cuisines error:', error);
-      res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ error: 'Failed to fetch cuisines', details: error instanceof Error ? error.message : 'Unknown error' });
     }
   }
 
@@ -112,16 +113,19 @@ export class CuisineController {
         return;
       }
 
+      console.log('Fetching logs for user:', req.user.uid);
       const logs = await CuisineModel.getUserCuisineLogs(req.user.uid);
       const stats = await CuisineModel.getUserStats(req.user.uid);
 
+      console.log('Retrieved logs:', logs.length, 'stats:', stats);
+
       res.json({
-        logs,
-        stats,
+        logs: logs || [],
+        stats: stats || { total_cuisines: 0 },
       });
     } catch (error) {
       console.error('Get user logs error:', error);
-      res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ error: 'Failed to fetch user data', details: error instanceof Error ? error.message : 'Unknown error' });
     }
   }
 }

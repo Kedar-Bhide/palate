@@ -95,15 +95,16 @@ export class CuisineModel {
   static async getUserStats(userId: string): Promise<{ total_cuisines: number }> {
     try {
       const result = await pool.query(`
-        SELECT COUNT(DISTINCT lc.cuisine_id) as total_cuisines 
+        SELECT COALESCE(COUNT(DISTINCT lc.cuisine_id), 0) as total_cuisines 
         FROM cuisine_logs cl
         LEFT JOIN log_cuisines lc ON cl.id = lc.log_id
         WHERE cl.user_id = $1 AND lc.cuisine_id IS NOT NULL
       `, [userId]);
-      return { total_cuisines: parseInt(result.rows[0].total_cuisines || '0') };
+      const count = result.rows[0]?.total_cuisines || 0;
+      return { total_cuisines: parseInt(count.toString()) };
     } catch (error) {
       console.error('getUserStats error:', error);
-      // Fallback: return 0 if log_cuisines table doesn't exist yet
+      // Fallback: return 0 if there's any error
       return { total_cuisines: 0 };
     }
   }
