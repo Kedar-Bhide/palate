@@ -16,6 +16,19 @@ export const authenticateToken = async (
   next: NextFunction
 ): Promise<void> => {
   try {
+    if (!auth) {
+      console.warn('Firebase not initialized - skipping authentication for development');
+      // For development without Firebase, create a mock user
+      req.user = {
+        uid: 'dev-user-123',
+        email: 'dev@example.com',
+        name: 'Development User',
+        picture: '',
+      };
+      next();
+      return;
+    }
+
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(' ')[1];
 

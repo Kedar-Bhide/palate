@@ -35,6 +35,25 @@ export class CuisineController {
         return;
       }
 
+      if (!storage) {
+        // For development without Firebase Storage, use a placeholder URL
+        console.warn('Firebase Storage not available - using placeholder image');
+        const photo_url = `https://via.placeholder.com/400x300?text=Food+Photo`;
+
+        const cuisineLog = await CuisineModel.createCuisineLog({
+          user_id: req.user!.uid,
+          cuisine_id: parseInt(cuisine_id),
+          photo_url,
+          caption,
+        });
+
+        res.status(201).json({
+          message: 'Cuisine logged successfully (development mode)',
+          log: cuisineLog,
+        });
+        return;
+      }
+
       const filename = `${uuidv4()}_${file.originalname}`;
       const bucket = storage.bucket();
       const fileUpload = bucket.file(`cuisine-photos/${filename}`);
