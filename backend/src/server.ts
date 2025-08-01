@@ -21,12 +21,22 @@ if (process.env.FRONTEND_URL) {
   allowedOrigins.push(process.env.FRONTEND_URL);
 }
 
+console.log('NODE_ENV:', process.env.NODE_ENV);
+console.log('FRONTEND_URL:', process.env.FRONTEND_URL);
 console.log('CORS allowed origins:', allowedOrigins);
 
-app.use(cors({
+// For production debugging - temporarily allow all origins
+const corsOptions = process.env.NODE_ENV === 'production' ? {
+  origin: true, // Allow all origins temporarily
+  credentials: true,
+} : {
   origin: allowedOrigins,
   credentials: true,
-}));
+};
+
+console.log('CORS options:', corsOptions);
+
+app.use(cors(corsOptions));
 app.use(morgan('combined'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
