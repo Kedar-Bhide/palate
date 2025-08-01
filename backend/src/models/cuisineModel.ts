@@ -58,12 +58,15 @@ export class CuisineModel {
     const result = await pool.query(`
       SELECT 
         cl.*,
-        ARRAY_AGG(
-          JSON_BUILD_OBJECT(
-            'id', c.id,
-            'name', c.name,
-            'category', c.category
-          )
+        COALESCE(
+          ARRAY_AGG(
+            JSON_BUILD_OBJECT(
+              'id', c.id,
+              'name', c.name,
+              'category', c.category
+            )
+          ) FILTER (WHERE c.id IS NOT NULL),
+          ARRAY[]::json[]
         ) as cuisines
       FROM cuisine_logs cl
       LEFT JOIN log_cuisines lc ON cl.id = lc.log_id
@@ -79,9 +82,9 @@ export class CuisineModel {
     const result = await pool.query(`
       SELECT COUNT(DISTINCT lc.cuisine_id) as total_cuisines 
       FROM cuisine_logs cl
-      JOIN log_cuisines lc ON cl.id = lc.log_id
-      WHERE cl.user_id = $1
+      LEFT JOIN log_cuisines lc ON cl.id = lc.log_id
+      WHERE cl.user_id = $1 AND lc.cuisine_id IS NOT NULL
     `, [userId]);
-    return { total_cuisines: parseInt(result.rows[0].total_cuisines) };
+    return { total_cuisines: parseInt(result.rows[0].total_cuisines || '0') };
   }
 }
