@@ -2,6 +2,12 @@ import { auth } from './firebase';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3001/api';
 
+console.log('API_BASE_URL configured as:', API_BASE_URL);
+console.log('Environment variables:', {
+  NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
+  NODE_ENV: process.env.NODE_ENV
+});
+
 interface ApiResponse {
   [key: string]: unknown;
 }
@@ -41,15 +47,20 @@ class ApiClient {
     try {
       const headers = await this.getAuthHeaders();
       console.log('Making API request to:', `${API_BASE_URL}${endpoint}`);
+      console.log('Request headers:', headers);
       
       const response = await fetch(`${API_BASE_URL}${endpoint}`, {
         method: 'GET',
         headers,
       });
 
+      console.log('Response status:', response.status);
+      console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+
       if (!response.ok) {
         const errorText = await response.text();
         console.error('API Error Response:', errorText);
+        console.error('Full response:', response);
         throw new Error(`API request failed: ${response.status} ${response.statusText}`);
       }
 
