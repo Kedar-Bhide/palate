@@ -9,7 +9,7 @@ import cuisineRoutes from './routes/cuisines';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = parseInt(process.env.PORT || '3001');
 
 app.use(helmet());
 app.use(cors({
@@ -36,7 +36,7 @@ app.use((error: any, req: express.Request, res: express.Response, next: express.
   res.status(500).json({ error: 'Internal server error' });
 });
 
-app.listen(PORT, '0.0.0.0', () => {
+app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 
