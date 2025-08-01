@@ -45,7 +45,12 @@ app.use('/api/auth', authRoutes);
 app.use('/api/cuisines', cuisineRoutes);
 
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', timestamp: new Date().toISOString() });
+  res.json({ 
+    status: 'OK', 
+    timestamp: new Date().toISOString(),
+    cors_fix_deployed: true,
+    node_env: process.env.NODE_ENV
+  });
 });
 
 app.use((req, res) => {
