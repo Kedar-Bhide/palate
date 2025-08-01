@@ -2,6 +2,7 @@
 
 import { CuisineLog, UserStats } from '@/types';
 import { CalendarIcon, GlobeAltIcon } from '@heroicons/react/24/outline';
+import Image from 'next/image';
 
 interface ProfilePageProps {
   logs: CuisineLog[];
@@ -49,9 +50,11 @@ export default function ProfilePage({ logs, stats }: ProfilePageProps) {
             {logs.map((log) => (
               <div key={log.id} className="p-6 hover:bg-gray-50">
                 <div className="flex gap-4">
-                  <img
+                  <Image
                     src={log.photo_url}
                     alt={log.cuisine_name}
+                    width={80}
+                    height={80}
                     className="w-20 h-20 object-cover rounded-lg"
                   />
                   <div className="flex-1">

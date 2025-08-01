@@ -2,6 +2,10 @@ import { auth } from './firebase';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3001/api';
 
+interface ApiResponse {
+  [key: string]: unknown;
+}
+
 class ApiClient {
   private async getAuthHeaders(): Promise<HeadersInit> {
     const user = auth.currentUser;
@@ -17,7 +21,7 @@ class ApiClient {
     };
   }
 
-  async get(endpoint: string): Promise<any> {
+  async get(endpoint: string): Promise<ApiResponse> {
     const headers = await this.getAuthHeaders();
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       method: 'GET',
@@ -31,7 +35,7 @@ class ApiClient {
     return response.json();
   }
 
-  async post(endpoint: string, data?: any): Promise<any> {
+  async post(endpoint: string, data?: unknown): Promise<ApiResponse> {
     const headers = await this.getAuthHeaders();
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       method: 'POST',
@@ -46,7 +50,7 @@ class ApiClient {
     return response.json();
   }
 
-  async postFormData(endpoint: string, formData: FormData): Promise<any> {
+  async postFormData(endpoint: string, formData: FormData): Promise<ApiResponse> {
     const user = auth.currentUser;
     const headers: HeadersInit = {};
     

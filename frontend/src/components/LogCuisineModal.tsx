@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { apiClient } from '@/lib/api';
 import { Cuisine } from '@/types';
 import { XMarkIcon, PhotoIcon } from '@heroicons/react/24/outline';
+import Image from 'next/image';
 
 interface LogCuisineModalProps {
   isOpen: boolean;
@@ -29,7 +30,7 @@ export default function LogCuisineModal({ isOpen, onClose, onSuccess }: LogCuisi
   const fetchCuisines = async () => {
     try {
       const response = await apiClient.get('/cuisines');
-      setCuisines(response);
+      setCuisines(response as unknown as Cuisine[]);
     } catch (error) {
       console.error('Failed to fetch cuisines:', error);
       setError('Failed to load cuisines');
@@ -113,9 +114,11 @@ export default function LogCuisineModal({ isOpen, onClose, onSuccess }: LogCuisi
             <div className="border-2 border-dashed border-gray-300 rounded-lg p-6">
               {photoPreview ? (
                 <div className="text-center">
-                  <img
+                  <Image
                     src={photoPreview}
                     alt="Preview"
+                    width={160}
+                    height={160}
                     className="mx-auto max-h-40 rounded"
                   />
                   <button

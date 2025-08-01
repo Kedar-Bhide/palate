@@ -19,8 +19,8 @@ export default function HomePage() {
   const fetchUserData = async () => {
     try {
       const response = await apiClient.get('/cuisines/logs');
-      setLogs(response.logs);
-      setStats(response.stats);
+      setLogs(response.logs as unknown as CuisineLog[]);
+      setStats(response.stats as unknown as UserStats);
     } catch (error) {
       console.error('Failed to fetch user data:', error);
     } finally {

@@ -3,6 +3,7 @@
 import { useAuth } from '@/contexts/AuthContext';
 import { useState } from 'react';
 import { ArrowRightOnRectangleIcon, UserCircleIcon } from '@heroicons/react/24/outline';
+import Image from 'next/image';
 
 interface HeaderProps {
   onLogCuisineClick: () => void;
@@ -42,9 +43,11 @@ export default function Header({ onLogCuisineClick }: HeaderProps) {
                 className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-100"
               >
                 {user?.photoURL ? (
-                  <img
+                  <Image
                     src={user.photoURL}
                     alt="Profile"
+                    width={32}
+                    height={32}
                     className="w-8 h-8 rounded-full"
                   />
                 ) : (

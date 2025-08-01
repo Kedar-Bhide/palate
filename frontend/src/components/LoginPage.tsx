@@ -28,7 +28,7 @@ export default function LoginPage() {
           <div className="mb-8">
             <div className="text-6xl mb-4">🍽️</div>
             <p className="text-gray-700">
-              Log different cuisines you've tried, upload photos, and build your personal culinary profile.
+              Log different cuisines you&apos;ve tried, upload photos, and build your personal culinary profile.
             </p>
           </div>
 
